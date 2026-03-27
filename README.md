@@ -44,7 +44,7 @@ The workflow is designed to run on cloud infrastructure (AWS EC2) using Docker a
 
 ## Pipeline Workflow
 
-### 1. Environment Setup
+# 1. Environment Setup
 ```bash
 conda create -n microbiome python=3.10 -y
 conda activate microbiome
@@ -54,7 +54,7 @@ megahit bowtie2 samtools metabat2 gtdbtk bedtools hmmer -y
 
 pip install semibin
 
-### 2. Taxonomic Profiling (Kraken2)
+# 2. Taxonomic Profiling (Kraken2)
 ```bash
 kraken2 \
 --db k2_standard \
@@ -66,7 +66,7 @@ Generates:
 •	Taxonomic reports
 •	Genus-level abundance matrix
 
-### 3. Assembly (MEGAHIT)
+# 3. Assembly (MEGAHIT)
 ```bash
 megahit \
 -1 reads_R1.fastq.gz \
@@ -74,18 +74,18 @@ megahit \
 -o assembly_output \
 -t 32
 
-### 4. Read Mapping
+# 4. Read Mapping
 ```bash
 bowtie2 -x contigs_index \
 -1 reads_R1.fastq.gz \
 -2 reads_R2.fastq.gz | samtools view -bS - > output.bam
 
-### 5. Genome Binning
+# 5. Genome Binning
 •	MetaBAT2
 •	SemiBin2
 •	DAS Tool (integration)
 
-### 6. MAG Quality Filtering
+# 6. MAG Quality Filtering
 ```bash
 checkm2 predict \
 -i bins \
@@ -95,35 +95,33 @@ Filtering thresholds:
 •	High quality: ≥90% completeness, ≤5% contamination
 •	Medium quality: ≥50% completeness, ≤10% contamination
 
-### 7. Dereplication
+# 7. Dereplication
 ```bash
 dRep dereplicate output_dir \
 -g bins/*.fa \
 -p 16
 
-### 8. Taxonomic Classification
+# 8. Taxonomic Classification
 ```bash
 gtdbtk classify_wf \
 --genome_dir bins \
 --out_dir gtdbtk_out
 
-### 9. Functional Annotation
+# 9. Functional Annotation
 ```bash
 emapper.py \
 -i genes.faa \
 --data_dir eggnog_db \
 -o annotations
 
-### 10. Abundance Estimation
+# 10. Abundance Estimation
 ```bash
 coverm genome \
 --bam-files *.bam \
 --genome-fasta-directory genomes \
 -o abundance.tsv
 
----
-
-Key Outputs
+## Key Outputs
 •	Taxonomic profiles
 •	Assembly contigs
 •	MAG catalogue
@@ -132,17 +130,17 @@ Key Outputs
 •	Nitrogen metabolism gene profiles
 •	Abundance matrices
 
-Reproducibility
+## Reproducibility
 •	Modular pipeline design
 •	Docker-compatible
 •	Cloud-ready (AWS)
 •	Easily adaptable to HPC clusters
 
-Notes
+## Notes
 •	Raw sequencing data and databases are not included
 •	Paths and credentials have been removed for security
 
-Author
+## Author
 Ayemere J. Bellowalker
 PhD Researcher – Microbial Genomics & Bioinformatics
 
