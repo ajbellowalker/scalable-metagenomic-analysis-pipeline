@@ -1,12 +1,15 @@
-### LINUX workflow
+# LINUX workflow
 ## Make Directories
+```bash
 mkdir -p ~/metagenome/{raw_reads,qc_reads,host_removed,kraken,humann,scripts,assemblies,bins,annotation,logs}
 
 ls ~/metagenome
 mkdir databases
 cd databases
+```
 
 ## Setup miniconda 
+```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 
@@ -36,18 +39,24 @@ which metabat2
 which gtdbtk
 which bedtools
 which hmmsearch
+```
 
 ## Install Java
+```bash
 sudo apt update
 sudo apt install openjdk-17-jre -y
 java -version
+```
 
 ## Install Nextflow
+```bash
 curl -s https://get.nextflow.io | bash
 sudo mv nextflow /usr/local/bin/
 nextflow -version
+```
 
 ## Install Docker
+```bash
 sudo apt update
 sudo apt install docker.io -y
 sudo systemctl start docker
@@ -57,20 +66,17 @@ sudo chmod 666 /var/run/docker.sock
 newgrp docker
 docker run hello-world
 docker ps
+```
 
 ## Pull HUMAnN container
+```bash
 docker pull biobakery/humann
 docker run biobakery/humann humann --version
 docker run -v ~/metagenome:/data biobakery/humann ls /data
-
-## Download Sequence files
-rsync -avz --progress \
--e "ssh -i ~/ .pem key path \
-/raw reads path/ \
-ubuntu@{IP address}:~/metagenome/raw_reads/
-ls ~/metagenome/raw_reads | wc -l
+```
 
 ## Download gtdbtk database
+```bash
 mkdir -p databases/gtdbtk
 cd ~/metagenome/databases/gtdbtk
 
@@ -89,8 +95,10 @@ export GTDBTK_DATA_PATH=/home/ubuntu/metagenome/databases/gtdbtk/release226
 source ~/.bashrc
 
 gtdbtk check_install
+```
 
 ## Download Kraken database
+```bash
 wget https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20240112.tar.gz
 
 tar -xvzf k2_standard_20240112.tar.gz
@@ -99,8 +107,10 @@ ls -lh ~/metagenome/databases
 du -sh ~/metagenome/databases/*
 
 kraken2 --db ~/metagenome/databases/k2_standard help
+```
 
 ## Run Kraken2
+```bash
 for r1 in raw_reads/*_R1_001_fastp.fastq.gz
 do
 base=$(basename $r1 _R1_001_fastp.fastq.gz)
@@ -119,9 +129,10 @@ watch -n 15 'du -sh kraken_reports && ls -lh kraken_reports'
 ls kraken_reports/*.report | wc -l
 
 awk '$4=="G"' kraken_reports/*.report > genus_abundance.txt
-
+```
 
 ## Create genus matrix
+```py
 python3 << 'EOF'
 import glob
 import pandas as pd
@@ -146,8 +157,10 @@ print("Saved:", df.shape)
 EOF
 
 head kraken_genus_matrix.csv
+```
 
 ## Run Cluster Samples
+```py
 python3 << 'EOF'
 import pandas as pd
 
@@ -161,9 +174,11 @@ print("\nSample clusters:\n")
 for sample,cluster in zip(df.columns,clusters):
     print(sample,"→ cluster",cluster)
 EOF
+```
 
 ## Run MEGAHIT
-# Individual
+### Individual
+```bash
 mkdir -p assemblies/individual
 
 megahit \
@@ -180,8 +195,10 @@ megahit \
 done
 
 watch -n 15 'du -sh assemblies/individual && ls -lh assemblies/individual'
+```
 
-# Coassembly
+### Coassembly
+```bash
 ls raw_reads/*sample*_R1_001_fastp.fastq.gz \
    raw_reads/*sample *_R1_001_fastp.fastq.gz \
    raw_reads/*sample *_R1_001_fastp.fastq.gz \
@@ -204,9 +221,11 @@ megahit \
 --min-contig-len 1500
 
 watch -n 15 'du -sh assemblies/coassembly_5samples && ls -lh assemblies/coassembly_5samples/intermediate_contigs’
+```
 
 ## Download results backup
-# Check file size & info
+### Check file size & info
+```bash
 [ -f assemblies/coassembly_5samples/final.contigs.fa ] && echo "ASSEMBLY FINISHED" || echo "STILL RUNNING"
 
 ls -lh assemblies/coassembly_5samples/intermediate_contigs/*final.contigs.fa
@@ -216,8 +235,10 @@ grep -c ">" assemblies/coassembly_5samples/intermediate_contigs/k101.contigs.fa
 awk '/^>/ {if (seqlen){print seqlen};seqlen=0;next}{seqlen+=length($0)}END{print seqlen}' assemblies/coassembly_5samples/intermediate_contigs/k101.contigs.fa | awk '{sum+=$1} END {print sum/1000000000 " Gb"}'
 
 seqkit stats assemblies/coassembly_5samples/intermediate_contigs/k101.contigs.fa
+```
 
-# Compress & download files to local
+### Compress & download files to local
+```bash
 gzip assemblies/coassembly_5samples/intermediate_contigs/k101.contigs.fa
 
 tar -czvf results_backup.tar.gz \
@@ -228,30 +249,44 @@ kraken_genus_matrix.csv \
 genus_abundance.txt
 
 rm -r assemblies/coassembly_5samples/intermediate_contigs
+```
 
 ## Process Assembly 
-# Filter the assembly
+### Filter the assembly
+```bash
 seqkit seq -m 1500 k101.contigs.fa > coassembly_1.5kb.fa
 seqkit seq -m 1500 final.contigs.fa > individual_1.5kb.fa
+```
 
-# Merge Contigs
+### Merge Contigs
+```bash
 cat coassembly_1.5kb.fa individual_1.5kb.fa > merged_contigs.fa
+```
 
-# Remove duplicates
+### Remove duplicates
+```bash
 seqkit rmdup -s merged_contigs.fa > merged_contigs_dedup.fa
+```
 
-# Rename & check file
+### Rename & check file
+```bash
 seqkit rename merged_contigs_dedup.fa > contigs_final.fa
 seqkit stats contigs_final.fa
+```
 
-# Build Bowtie2 index
+### Build Bowtie2 index
+```bash
 bowtie2-build contigs_final.fa contigs_index
+```
 
-# Filter the final contigs
+### Filter the final contigs
+```bash
 seqkit seq -m 2000 contigs_final.fa > contigs_2kb.fa
 seqkit stats contigs_2kb.fa
+```
 
-# Map reads to contigs
+### Map reads to contigs
+```bash
 for r1 in raw_reads/*_R1_001_fastp.fastq.gz
 do
 sample=$(basename $r1 _R1_001_fastp.fastq.gz)
@@ -264,25 +299,33 @@ bowtie2 -x assemblies/contigs_index \
 done
 
 watch -n 15 ls -lh mapping
+```
 
-# Sort BAM files
+### Sort BAM files
+```bash
 for bam in *.bam
 do
 samtools sort -@ 8 -o ${bam%.bam}_sorted.bam $bam
 done
+```
 
-# Index sorted BAM files
+### Index sorted BAM files
+```bash
 for bam in *_sorted.bam
 do
 samtools index $bam
 done
+```
 
-# Generate depth file
+### Generate depth file
+```bash
 jjgi_summarize_bam_contig_depths \
 --outputDepth depth.txt \
 mapping/*_sorted.bam
+```
 
 ## Run MetaBAT2
+```bash
 mkdir bins/metabat2
 
 metabat2 \
@@ -297,8 +340,10 @@ for f in *.fa; do
 bin=$(basename $f .fa)
 grep ">" $f | sed "s/>//g" | awk -v b=$bin '{print $1"\t"b}'
 done > metabat_scaffolds2bin.tsv
+```
 
 ## Run SemiBin2
+```bash
 mkdir bins/semibin
 
 SemiBin2 single_easy_bin \
@@ -306,8 +351,10 @@ SemiBin2 single_easy_bin \
 -b mapping/*_sorted.bam \
 -o bins/semibin \
 --threads 16
+```
 
 ## Run DAS Tool
+```bash
 docker pull quay.io/biocontainers/das_tool:1.1.7--r44hdfd78af_1
 docker run --rm quay.io/biocontainers/das_tool:1.1.7--r44hdfd78af_1 DAS_Tool --help
 
@@ -338,8 +385,10 @@ while read bin; do
     | seqkit grep -f - contigs_2kb.fa \
     > bins/dastool_bins/${bin}.fa
 done < dastool_selected_bins.txt
+```
 
 ## MAG Quality filtering
+```bash
 checkm2 predict \
 -i bins/dastool_bins \
 -x fa \
@@ -376,16 +425,20 @@ done < good_MAGs.txt
 ls bins/MAGs_filtered | wc -l
 
 tar -czvf MAGs_filtered.tar.gz bins/MAGs_filtered
+```
 
 ## Generate MAG QC summary table
+```bash
 awk -F'\t' 'NR==1 || $2>=50 && $3<=10' bins/checkm2_dastool/quality_report.tsv \
 > MAG_quality_filtered.tsv
 
 for f in bins/drep_out/dereplicated_genomes/*.fa; do
 echo -e "$(basename $f .fa)\t$(grep -v ">" $f | wc -c)\t$(grep -c ">" $f)"
 done > MAG_basic_stats.tsv
+```
 
 ## Run DeRep
+```bash
 mamba create -n drep_env -c bioconda -c conda-forge \
 python=3.10 drep fastani mash pandas=1.5
 conda activate drep_env
@@ -397,8 +450,10 @@ dRep dereplicate bins/drep_out \
 --ignoreGenomeQuality
 
 ls bins/drep_out/dereplicated_genomes | wc -l
+```
 
 ## Assign Taxonomy with GTDBTK
+```bash
 gtdbtk classify_wf \
 --genome_dir bins/drep_out/dereplicated_genomes \
 --extension fa \
@@ -407,8 +462,10 @@ gtdbtk classify_wf \
 
 head bins/gtdbtk_out/classify/gtdbtk.bac120.summary.tsv
 tar -czvf rumen_MAG_catalogue.tar.gz bins/drep_out/dereplicated_genomes bins/gtdbtk_out
+```
 
 ## Generate MAG Taxa summary table
+```bash
 paste \
 bins/checkm2_dastool/quality_report.tsv \
 bins/gtdbtk_out/classify/gtdbtk.bac120.summary.tsv \
@@ -433,17 +490,23 @@ echo -e "$MAG\t$COMP\t$CONT\t$SIZE\t$TAX" >> MAG_summary.tsv
 done
 
 bash mag_summary.sh
+```
 
 ## Detect novel rumen species
+```bash
 awk -F'\t' '$19 < 95' bins/gtdbtk_out/classify/gtdbtk.bac120.summary.tsv > novel_MAGs.tsv
 wc -l novel_MAGs.tsv
+```
 
 ## Build  MAG phylogenetic tree
+```bash
 ls bins/gtdbtk_out
 find bins/gtdbtk_out -name "*.tree"
 Go to https://itol.embl.de
+```
 
 ## Build MAG + Abundance 
+```bash
 cat bins/drep_out/dereplicated_genomes/*.fa > MAG_catalogue.fa
 grep ">" MAG_catalogue.fa | wc -l
 bowtie2-build MAG_catalogue.fa MAG_index
@@ -480,8 +543,10 @@ join -1 1 -2 1 \
 > MAG_abundance_taxonomy.tsv
 
 sort -k2 -nr MAG_abundance.tsv | head -30 > top_MAGs.tsv
+```
 
 ## Run eggNOG functional annotations
+```bash
 mkdir -p databases/eggnog
 cd databases/eggnog
 
@@ -505,8 +570,10 @@ emapper.py \
 
 cut -f1,12 MAG_eggnog.emapper.annotations > MAG_KOs.tsv
 cut -f1,7,12,13 MAG_eggnog.emapper.annotations > eggnog_annotations.tsv
+```
 
-# Extract Nitrogen Genes
+## Extract Nitrogen Genes
+```bash
 grep -Ei "glycoside|cellulase|xylanase|CAZy|GH|GT|PL|CE|CBM" eggnog_annotations.tsv > CAZymes.tsv
 grep -E "K02586|K02591|K02588|K00370|K00362|K04561|K00376|K01428|K01915" MAG_KOs.tsv > nitrogen_genes.tsv
 
@@ -517,9 +584,10 @@ cut -d "_" -f1 nitrogen_genes.tsv | sort | uniq -c
 
 sort -k2,2 nitrogen_genes_per_MAG.tsv > sorted_genes.tsv
 sort -k1,1 MAG_taxonomy.tsv > sorted_tax.tsv
+```
 
-
-### R workflow
+# R workflow
+```R
 install.packages("pheatmap")
 install.packages("tidyverse")
 install.packages(c("ggplot2", "vegan", "ggpubr", "dplyr"))
@@ -575,8 +643,10 @@ hist(prevalence,
      col="steelblue",
      main="MAG prevalence across rumen samples",
      xlab="Number of samples")
+```
 
 ## Load data for statistical analyses
+```R
 setwd("working directory path")
 
 abund <- read.csv("MAG_Abundance.csv")
@@ -638,18 +708,20 @@ merged[is.na(merged)] <- 0
 head(merged)
 
 write.csv(merged, "merged.csv", row.names = FALSE)
+```
 
 ## MAG Community Composition and Diversity
-# Beta Diversity
+### Beta Diversity
+```R
 abund_mat <- abund_rel %>%
   column_to_rownames("MAG")
 
 head(abund_mat)
 
-# Transpose
+## Transpose
 abund_t <- t(abund_mat)
 
-# Convert to dataframe
+## Convert to dataframe
 abund_t <- as.data.frame(abund_t)
 
 abund_log <- log10(abund_t + 1e-6)
@@ -661,7 +733,7 @@ pca_df$Sample <- rownames(pca_df)
 
 metadata <- read.csv("Metadata.csv", check.names = FALSE)
 
-# Remove empty columns
+## Remove empty columns
 metadata <- metadata[, colSums(is.na(metadata)) < nrow(metadata)]
 head(metadata$Sample)
 
@@ -674,12 +746,12 @@ write.csv(pca_df, "pca_df.csv", row.names = FALSE)
 
 pca_df$Treatment <- as.character(pca_df$Treatment)
 
-# Fix naming inconsistencies
+## Fix naming inconsistencies
 pca_df$Treatment[pca_df$Treatment == "Control"] <- "C"
 pca_df$Treatment[pca_df$Treatment == "Agolin"] <- "O"
 pca_df$Treatment[pca_df$Treatment == "AgolinYeaSacc"] <- "OY"
 
-# Convert to factor
+## Convert to factor
 pca_df$Treatment <- factor(pca_df$Treatment, levels = c("C", "O", "OY"))
 pca_df$Cow <- as.factor(pca_df$Cow)
 pca_df$Period <- as.factor(pca_df$Period)
@@ -687,7 +759,7 @@ pca_df$Period <- as.factor(pca_df$Period)
 unique(pca_df$Treatment)
 unique(pca_df$Cow)
 
-# Plot PCA
+## Plot PCA
 ggplot(pca_df, aes(x = PC1, y = PC2)) +
 
   # Points (treatment only)
@@ -731,26 +803,26 @@ ggplot(pca_df, aes(x = PC1, y = PC2)) +
 
 ggsave("PCA_MAG_abundance.tiff", width = 8, height = 6, dpi = 300)
 
-# Load Abundance Data
+## Load Abundance Data
 abundance_raw <- read.csv("MAG_Abundance.csv", row.names = 1)
 
-# Transpose Data
+## Transpose Data
 abundance <- t(abundance_raw)
 
-# Convert to dataframe
+## Convert to dataframe
 abundance <- as.data.frame(abundance)
 
-# PCA metadata
+## PCA metadata
 metadata <- pca_df
 rownames(metadata) <- metadata$Sample
 
-# Check matching
+## Check matching
 intersect(rownames(abundance), rownames(metadata))
 
-# Align Datasets
+## Align Datasets
 metadata <- metadata[rownames(abundance), ]
 
-# Remove NA
+## Remove NA
 abundance[is.na(abundance)] <- 0
 
 rownames(abundance)
@@ -758,7 +830,7 @@ rownames(metadata)
 
 sum(is.na(abundance))
 
-# BRAY-CURTIS + PERMANOVA
+## BRAY-CURTIS + PERMANOVA
 library(vegan)
 
 dist_mat <- vegdist(abundance, method = "bray")
@@ -770,7 +842,7 @@ print(adonis_res)
 
 write.csv(as.data.frame(adonis_res), "Bray-Curtis_PERMANOVA_results.csv", row.names = TRUE)
 
-# Pairwise PERMANOVA
+## Pairwise PERMANOVA
 pairwise_permanova <- function(dist_mat, metadata, group_var) {
   
   groups <- unique(metadata[[group_var]])
@@ -806,18 +878,20 @@ pairwise_res$P_adj <- p.adjust(pairwise_res$P, method = "BH")
 print(pairwise_res)
 
 write.csv(pairwise_res, "Bray-Curtis_pairwise_PERMANOVA_results.csv", row.names = FALSE)
+```
 
-# Alpha Diversity
+### Alpha Diversity
+```R
 abund_t <- t(abund_mat)
 abund_t <- as.data.frame(abund_t)
 
-# Shannon
+## Shannon
 shannon <- diversity(abund_t, index = "shannon")
 
-# Simpson
+## Simpson
 simpson <- diversity(abund_t, index = "simpson")
 
-# Richness
+## Richness
 richness <- specnumber(abund_t)
 
 alpha_df <- data.frame(
@@ -886,61 +960,11 @@ ggsave("MAG_richness.png", width = 8, height = 6, dpi = 300)
 kruskal.test(Shannon ~ Treatment, data = alpha_df)
 kruskal.test(Simpson ~ Treatment, data = alpha_df)
 kruskal.test(Richness ~ Treatment, data = alpha_df)
+```
 
-## Plots and Correlations
-# Physiological parameters by treatment
-ggplot(metadata, aes(x = Treatment, y = Rumen_NH4, fill = Treatment)) +
-  geom_boxplot(alpha = 0.7) +
-  geom_jitter(width = 0.15, size = 2) +
-  theme_classic() +
-  scale_fill_manual(values = c(
-    "Control" = "#ede109",
-    "Agolin" = "#0ec60e",
-    "AgolinYeaSacc" = "#1089cf"
-  )) +
-  labs(
-    title = "Rumen Ammonia by Treatment",
-    x = "Treatment",
-    y = "NH₃ (mg/L)"
-  )
-
-ggsave("Rumen_NH3_by_Treatment.png", width = 8, height = 6, dpi = 300)
-
-ggplot(metadata, aes(x = Treatment, y = UREA, fill = Treatment)) +
-  geom_boxplot(alpha = 0.7) +
-  geom_jitter(width = 0.15, size = 2) +
-  theme_classic() +
-  scale_fill_manual(values = c(
-    "Control" = "#ede109",
-    "Agolin" = "#0ec60e",
-    "AgolinYeaSacc" = "#1089cf"
-  )) +
-  labs(
-    title = "Urea by Treatment",
-    x = "Treatment",
-    y = "Urea (mmol/L)"
-  )
-
-ggsave("Urea_by_Treatment.png", width = 8, height = 6, dpi = 300)
-
-ggplot(metadata, aes(x = Treatment, y = pH, fill = Treatment)) +
-  geom_boxplot(alpha = 0.7) +
-  geom_jitter(width = 0.15, size = 2) +
-  theme_classic() +
-  scale_fill_manual(values = c(
-    "Control" = "#ede109",
-    "Agolin" = "#0ec60e",
-    "AgolinYeaSacc" = "#1089cf"
-  )) +
-  labs(
-    title = "pH by Treatment",
-    x = "Treatment",
-    y = "pH"
-  )
-
-ggsave("pH_by_Treatment.png", width = 8, height = 6, dpi = 300)
-
-# Correlation between PCA and Physiology
+## Correlations stats and plots for PCA
+### Correlation Stats between PCA and Physiological Parameters
+```R
 PC1_cor_Rumen_NH4 <- cor.test(pca_df$PC1, pca_df$Rumen_NH4)
 write.csv(data.frame(
   Correlation = PC1_cor_Rumen_NH4$estimate,
@@ -1000,7 +1024,10 @@ write.csv(data.frame(
   CI_low = PC2_cor_pH$conf.int[1],
   CI_high = PC2_cor_pH$conf.int[2]
 ), "PC2_pH_correlation.csv", row.names = FALSE)
+```
 
+### Correlation Plots betwen PCA and Physiological Parameters
+```R
 ggplot(pca_df, aes(x = PC1, y = Rumen_NH4, color = Treatment)) +
   geom_point(size = 4) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -1036,9 +1063,11 @@ ggplot(pca_df, aes(x = PC1, y = pH, color = Treatment)) +
   theme_classic()
 
 ggsave("Rumen_pH_correlation.png", width = 8, height = 6, dpi = 300)
+```
 
 ## Nitrogen Metabolism Genes
-# Convert abundance to long format
+### Convert abundance to long format
+```R
 abund_long <- abund_rel %>%
   pivot_longer(-MAG, names_to = "Sample", values_to = "Abundance")
 
@@ -1046,8 +1075,10 @@ unique(n_long$MAG)[1:10]
 unique(abund_long$MAG)[1:10]
 
 intersect(unique(abund_long$MAG), unique(n_long$MAG))
+```
 
-# Merge with Data
+### Merge with Datasets
+```R
 n_sample <- abund_long %>%
   left_join(n_long, by = "MAG")
 
@@ -1070,9 +1101,10 @@ n_sample_wide <- n_sample_wide %>%
 colnames(n_sample_wide) <- colnames(n_sample_wide) %>%
   gsub("-", "_", .) %>%
   gsub(" ", "_", .)
+```
 
-kruskal.test(Gln_synt_C ~ Treatment, data = n_sample_wide)
-
+### Plot N-Genes againt Treatment & Physiological Parameters
+```R
 genes <- c("Amidohydro_1","Cytochrom_C552", "Fer2_BFD", "Fer4_NifH", "Gln_synt_C", 
 "GSIII_N", "Gln_synt_N", "Molybdopterin","Molydop_binding", 
 "Nitr_red_alph_N", "Nitr_red_bet_C","Oxidored_nitro", 
@@ -1115,18 +1147,23 @@ for (g in genes) {
 
     ggsave(paste0(g, "_UREA_correlation.png"), width = 8, height = 6, dpi = 300)
 }
+```
 
-## Linear Discriminant Analysis
+## Linear Discriminant Analysis for N-genes
+```R
 library(dplyr)
 library(MASS)
 
-# Select Only Gene Columns
+## Select Only Gene Columns
 gene_cols <- c("Amidohydro_1","Cytochrom_C552", "Fer2_BFD", "Fer4_NifH", "Gln_synt_C", 
 "GSIII_N", "Gln_synt_N", "Molybdopterin","Molydop_binding", 
 "Nitr_red_alph_N", "Nitr_red_bet_C","Oxidored_nitro", 
 "Pyr_redox_2", "Urease_alpha","Urease_beta"
 )
+```
 
+### Create LDA model for N-genes
+```R
 lda_data <- n_sample_wide %>%
   dplyr::select(all_of(gene_cols), Treatment) %>%
   na.omit()
@@ -1156,7 +1193,9 @@ write.csv(lda_agg, "LDA_aggregated.csv", row.names = FALSE)
 lda_results <- read.csv("LDA_results.csv")
 
 lda_results$Direction <- ifelse(lda_results$LD1 > 0, "C/OY", "O")
-
+```
+### Plot LDA for N-genes
+```R
 ggplot(lda_results, aes(x = reorder(Feature, LD1), y = LD1, fill = Direction)) +
   geom_col() +
   coord_flip() +
@@ -1190,7 +1229,9 @@ ggplot(lda_df, aes(x = LD1, y = LD2, color = Treatment)) +
     "AgolinYeaSacc" = "#1089cf"
   ))
 ggsave("LDA_N_Gene_plot.png", width = 8, height = 6, dpi = 300)
-
+```
+### Run Kruskal-wallis Test
+```R
 pvals_Kruskal <- n_sample_wide %>%
   select(all_of(gene_cols), Treatment) %>%
   pivot_longer(-Treatment, names_to = "Feature", values_to = "Value") %>%
@@ -1211,9 +1252,11 @@ write.csv(final_results_Kruskal, "LDA_with_pvalues_Kruskal.csv", row.names = FAL
 final_results_Kruskal$p_adj <- p.adjust(final_results_Kruskal$p_value, method = "BH")
 
 write.csv(final_results_Kruskal, "n_genes_stats_results.csv", row.names = FALSE)
+```
 
 ## Save Stats Results
-# Alpha Diversity
+### Alpha Diversity
+```R
 alpha_stats <- data.frame(
   Metric = c("Shannon", "Simpson", "Richness"),
   Chi_sq = c(
@@ -1234,8 +1277,10 @@ alpha_stats <- data.frame(
 )
 
 write.csv(alpha_stats, "alpha_diversity_stats.csv", row.names = FALSE)
+```
 
-# Beta Diversity
+### Beta Diversity
+```R
 permanova <- adonis2(
   abund_log ~ Treatment,
   data = metadata,
@@ -1245,8 +1290,10 @@ permanova <- adonis2(
 beta_stats <- as.data.frame(permanova)
 
 write.csv(beta_stats, "beta_diversity_PERMANOVA.csv")
+```
 
-# Correlation Results
+### Multi-correlation Results (Physiological Parameters)
+```R
 vars <- c("Amidohydro_1","Cytochrom_C552", "Fer2_BFD", "Fer4_NifH", "Gln_synt_C", 
 "GSIII_N", "Gln_synt_N", "Molybdopterin","Molydop_binding", 
 "Nitr_red_alph_N", "Nitr_red_bet_C","Oxidored_nitro", 
@@ -1299,4 +1346,4 @@ urea_cor_results <- lapply(vars, function(v) {
 urea_cor_results_df <- do.call(rbind, urea_cor_results)
 
 write.csv(urea_cor_results_df, "UREA_multi_correlation_results.csv", row.names = FALSE)
-
+```
