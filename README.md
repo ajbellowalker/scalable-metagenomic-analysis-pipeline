@@ -18,8 +18,8 @@ The workflow is designed to run on cloud infrastructure (AWS EC2) using Docker a
 - Abundance estimation using CoverM
 
 ## Dataset Scale
-- >190 GB raw sequencing data
-- >2.3 billion reads processed
+- ~190 GB raw sequencing data
+- ~2.3 billion reads processed
 - 1,429 MAGs reconstructed
 - ~250 medium/high-quality MAGs retained
 - ~80 putative novel MAGs identified
@@ -53,6 +53,8 @@ conda install -c bioconda -c conda-forge \
 megahit bowtie2 samtools metabat2 gtdbtk bedtools hmmer -y
 
 pip install semibin
+
+---
 
 ### 2. Taxonomic Profiling (Kraken2)
 ```bash
