@@ -147,6 +147,7 @@ coverm genome \
 ## Notes
 - Raw sequencing data and databases are not included
 - Paths and credentials have been removed for security
+- View doc/full_workflow.md for statistics pipeline on R
 
 ## Author
 Ayemere J. Bellowalker  
