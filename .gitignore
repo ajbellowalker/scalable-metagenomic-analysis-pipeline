@@ -1,0 +1,13 @@
+data/
+results/
+raw_reads/
+databases/
+*.fastq
+*.fastq.gz
+*.fq
+*.bam
+*.sam
+*.fa
+*.fasta
+*.gz
+*.tar.gz
