@@ -121,7 +121,7 @@ coverm genome \
 --genome-fasta-directory genomes \
 -o abundance.tsv
 
-## Key Outputs
+Key Outputs
 •	Taxonomic profiles
 •	Assembly contigs
 •	MAG catalogue
@@ -130,17 +130,17 @@ coverm genome \
 •	Nitrogen metabolism gene profiles
 •	Abundance matrices
 
-## Reproducibility
+Reproducibility
 •	Modular pipeline design
 •	Docker-compatible
 •	Cloud-ready (AWS)
 •	Easily adaptable to HPC clusters
 
-## Notes
+Notes
 •	Raw sequencing data and databases are not included
 •	Paths and credentials have been removed for security
 
-## Author
+Author
 Ayemere J. Bellowalker
 PhD Researcher – Microbial Genomics & Bioinformatics
 
