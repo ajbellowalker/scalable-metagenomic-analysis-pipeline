@@ -18,8 +18,8 @@ The workflow is designed to run on cloud infrastructure (AWS EC2) using Docker a
 - Abundance estimation using CoverM
 
 ## Dataset Scale
-- >190 GB raw sequencing data
-- >2.3 billion reads processed
+- ~190 GB raw sequencing data
+- ~2.3 billion reads processed
 - 1,429 MAGs reconstructed
 - ~250 medium/high-quality MAGs retained
 - ~80 putative novel MAGs identified
@@ -121,7 +121,7 @@ coverm genome \
 --genome-fasta-directory genomes \
 -o abundance.tsv
 
-Key Outputs
+## Key Outputs
 •	Taxonomic profiles
 •	Assembly contigs
 •	MAG catalogue
@@ -130,17 +130,17 @@ Key Outputs
 •	Nitrogen metabolism gene profiles
 •	Abundance matrices
 
-Reproducibility
+## Reproducibility
 •	Modular pipeline design
 •	Docker-compatible
 •	Cloud-ready (AWS)
 •	Easily adaptable to HPC clusters
 
-Notes
+## Notes
 •	Raw sequencing data and databases are not included
 •	Paths and credentials have been removed for security
 
-Author
+## Author
 Ayemere J. Bellowalker
 PhD Researcher – Microbial Genomics & Bioinformatics
 
