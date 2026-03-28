@@ -2,8 +2,6 @@
 
 A modular, reproducible metagenomics pipeline built using Nextflow DSL2 for taxonomic profiling, assembly, genome binning, and MAG analysis.
 
----
-
 ## 🚀 Features
 
 - ⚙️ Fully modular Nextflow DSL2 workflow  
@@ -15,13 +13,9 @@ A modular, reproducible metagenomics pipeline built using Nextflow DSL2 for taxo
 - 📈 Automated reporting with MultiQC  
 - ☁️ Cloud-ready (AWS / HPC compatible)  
 
----
-
 ## 🧠 Pipeline Overview
 
 Reads → Kraken2 → MEGAHIT → MetaBAT2 → CheckM2 → GTDB-Tk → MultiQC
-
----
 
 ## 📦 Installation
 
@@ -30,15 +24,11 @@ git clone https://github.com/ajbellowalker/scalable-metagenomic-analysis-pipelin
 cd scalable-metagenomic-analysis-pipeline
 ```
 
----
-
 ## ▶️ Run Pipeline (Local)
 
 ```bash
 nextflow run main.nf -profile conda
 ```
-
----
 
 ## ☁️ Run Full Pipeline (Cloud / HPC)
 
@@ -49,37 +39,28 @@ nextflow run main.nf -profile conda \
 --run_gtdbtk true
 ```
 
----
-
 ## 📊 Output
 
-results/	
-├── kraken2/	
-├── megahit/	
-├── metabat2/	
-├── checkm2/	
-├── gtdbtk/	
-├── multiqc/	
-
----
+results/		
+├── kraken2/		
+├── megahit/		
+├── metabat2/			
+├── checkm2/		
+├── gtdbtk/		
+├── multiqc/		
 
 ## 📈 Example Output
 
-```bash
+```markdown
 ![MultiQC Report](figures/multiqc_report.png)
 ```
 
 See /figures for more example outputs.
 
----
-
 ## 🧑‍💻 Author
 
-Ayemere J. Bellowalker	Bioinformatics | Microbiome | Computational Biology
-
----
+Ayemere J. Bellowalker		 Bioinformatics | Microbiome | Computational Biology
 
 ## 📄 License
 
 MIT
-
