@@ -4,7 +4,6 @@ raw_reads/
 databases/
 nextflow/
 work/
-# Nextflow
 .nextflow*
 *.fastq
 *.fastq.gz
