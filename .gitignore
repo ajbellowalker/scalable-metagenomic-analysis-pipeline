@@ -1,18 +1,9 @@
-# Nextflow
 work/
 results/
 .nextflow
 .nf*
-
-# Data
 data/
 databases/
-
-# Mac
 .DS_Store
-
-# Logs
 *.log
-
-# Conda
 .env
