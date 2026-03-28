@@ -39,6 +39,7 @@ nextflow run main.nf -profile conda
 
 ```bash
 nextflow run main.nf -profile conda \
+--run_megahit true \
 --run_metabat2 true \
 --run_checkm2 true \
 --run_gtdbtk true
