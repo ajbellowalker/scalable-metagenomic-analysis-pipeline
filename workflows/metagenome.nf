@@ -13,7 +13,8 @@ workflow METAGENOME_PIPELINE {
 
     kraken_out = KRAKEN2(reads_ch)
 
-    assembly_out = MEGAHIT(reads_ch)
+    if (params.run_megahit) {
+    assembly_out = MEGAHIT(reads_ch)}
 
     if (params.run_metabat2) {
         bins = METABAT2(assembly_out)

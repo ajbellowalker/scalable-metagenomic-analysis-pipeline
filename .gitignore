@@ -8,3 +8,4 @@ databases/
 *.log
 .env
 nextflow/
+.DS_Store

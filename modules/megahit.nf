@@ -16,6 +16,7 @@ process MEGAHIT {
     -1 ${reads[0]} \
     -2 ${reads[1]} \
     -o ${sample_id}_assembly \
-    -t ${params.threads}
+    -t 4 \
+    -m 0.5
     """
 }
