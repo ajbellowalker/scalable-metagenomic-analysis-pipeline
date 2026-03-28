@@ -51,9 +51,7 @@ results/
 
 ## 📈 Example Output
 
-```markdown
 ![MultiQC Report](figures/multiqc_report.png)
-```
 
 See /figures for more example outputs.
 

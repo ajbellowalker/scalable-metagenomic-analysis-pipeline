@@ -1,7 +1,7 @@
 # Nextflow
 work/
 results/
-.nextflow*
+.nextflow
 .nf*
 
 # Data
