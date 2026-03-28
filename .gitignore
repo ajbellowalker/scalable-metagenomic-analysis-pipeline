@@ -1,16 +1,18 @@
-data/
-results/
-raw_reads/
-databases/
-nextflow/
+# Nextflow
 work/
+results/
 .nextflow*
-*.fastq
-*.fastq.gz
-*.fq
-*.bam
-*.sam
-*.fa
-*.fasta
-*.gz
-*.tar.gz
+.nf*
+
+# Data
+data/
+databases/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# Conda
+.env
