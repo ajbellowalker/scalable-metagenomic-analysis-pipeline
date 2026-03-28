@@ -20,7 +20,9 @@ A modular, reproducible metagenomics pipeline built using Nextflow DSL2 for taxo
 3. Contigs are binned into MAGs (MetaBAT2)  
 4. MAG quality is assessed (CheckM2)  
 5. Taxonomy is assigned (GTDB-Tk)  
-6. Outputs are summarised with MultiQC and custom visualisations  
+6. Outputs are summarised with MultiQC and custom visualisations
+7. Workflow management: Nextflow (DSL2)
+8. Reproducibility: Conda / Micromamba environments  
 
 ## 📦 Installation
 
@@ -76,18 +78,6 @@ Distribution of MAG occurrence across samples, showing a core microbiome shared 
 - MAG prevalence analysis identifies a core microbiome shared across samples alongside low-abundance, sample-specific populations  
 
 These results demonstrate the integration of taxonomic, functional, and genome-resolved metagenomics approaches.
-
-## ⚙️ Methods Summary
-
-- **Taxonomic profiling:** Kraken2  
-- **Assembly:** MEGAHIT  
-- **Binning:** MetaBAT2  
-- **Quality assessment:** CheckM2  
-- **Taxonomic classification of MAGs:** GTDB-Tk  
-- **Workflow management:** Nextflow (DSL2)  
-- **Reproducibility:** Conda / Micromamba environments  
-
-The pipeline is modular, scalable, and designed for execution on local systems, HPC clusters, or cloud environments.
 
 ## 🌍 Biological Relevance
 
