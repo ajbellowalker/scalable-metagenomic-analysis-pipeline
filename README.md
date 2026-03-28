@@ -57,23 +57,15 @@ results/
 
 ## 📈 Results Overview
 
-### Figure 1: Taxonomic Composition (Genus Level)
 ![Taxa](figures/figure_1_taxa_barplot.png)
-
-### Figure 2: Nitrogen Metabolism Potential in MAGs
-![Nitrogen](figures/rumen_nitrogen_cycle_MAGs.png)
-
-### Figure 3: MAG Prevalence Across Samples
-![MAG](figures/figure_3_MAG_prevalence.png)
-
-## 🖼️ Figure Legends
-
 **Figure 1. Taxonomic composition at genus level.**  
 Relative abundance of dominant microbial genera identified from shotgun metagenomic sequencing using Kraken2. The community is characterised by taxa associated with fibre degradation and rumen fermentation.
 
+![Nitrogen](figures/rumen_nitrogen_cycle_MAGs.png)
 **Figure 2. Nitrogen metabolism potential across reconstructed MAGs.**  
 Presence/absence of key nitrogen cycling genes identified across metagenome-assembled genomes (MAGs). Functional annotation highlights pathways involved in ammonia assimilation, amino acid metabolism, and nitrogen turnover in the rumen microbiome.
 
+![MAG](figures/figure_3_MAG_prevalence.png)
 **Figure 3. Prevalence of reconstructed MAGs across samples.**  
 Distribution of MAG occurrence across samples, showing a core microbiome shared across multiple samples alongside low-prevalence, sample-specific genomes.
 
