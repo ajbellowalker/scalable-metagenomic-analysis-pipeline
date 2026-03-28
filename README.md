@@ -1,3 +1,14 @@
+## 🚀 Quick Start
+
+```bash
+# Clone repo
+git clone https://github.com/ajbellowalker/scalable-metagenomic-analysis-pipeline
+cd scalable-metagenomic-analysis-pipeline
+
+# Run pipeline
+nextflow run main.nf -profile conda
+```
+
 # 🧬 Scalable Metagenomic Analysis Pipeline (Nextflow + AWS-ready)
 
 A modular, reproducible metagenomics pipeline built using Nextflow DSL2 for taxonomic profiling, assembly, genome binning, and MAG analysis.
