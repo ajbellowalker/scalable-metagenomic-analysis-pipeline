@@ -46,13 +46,13 @@ nextflow run main.nf -profile conda \
 
 ## 📊 Output
 
-results/		
-├── kraken2/		
-├── megahit/		
-├── metabat2/			
-├── checkm2/		
-├── gtdbtk/		
-├── multiqc/		
+results/		  
+├── kraken2/		  
+├── megahit/		  
+├── metabat2/			  
+├── checkm2/		  
+├── gtdbtk/		  
+├── multiqc/	  	
 
 ## 📈 Results Overview
 
@@ -121,7 +121,7 @@ Designed for deployment on AWS or HPC environments, this workflow bridges biolog
 
 ## 🧑‍💻 Author
 
-Ayemere J. Bellowalker
+Ayemere J. Bellowalker  
 Bioinformatics | Microbiome | Computational Biology
 
 ## 📄 License
