@@ -1,0 +1,73 @@
+Mar-28 03:46:39.879 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf -profile conda -resume
+Mar-28 03:46:39.927 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.4
+Mar-28 03:46:39.940 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/Users/u5502376/.nextflow/plugins; core-plugins: nf-amazon@2.9.2,nf-azure@1.10.2,nf-cloudcache@0.4.2,nf-codecommit@0.2.2,nf-console@1.1.4,nf-google@1.15.3,nf-tower@1.9.3,nf-wave@1.7.4
+Mar-28 03:46:39.954 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Mar-28 03:46:39.955 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Mar-28 03:46:39.957 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Mar-28 03:46:39.965 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Mar-28 03:46:39.977 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/nextflow.config
+Mar-28 03:46:39.979 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/nextflow.config
+Mar-28 03:46:39.998 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /Users/u5502376/.nextflow/secrets/store.json
+Mar-28 03:46:39.999 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@19f9d595] - activable => nextflow.secret.LocalSecretsProvider@19f9d595
+Mar-28 03:46:40.003 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `conda`
+Mar-28 03:46:40.261 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [standard, conda]
+Mar-28 03:46:40.284 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
+Mar-28 03:46:40.293 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [voluminous_mendel] DSL2 - revision: 59b9619ba3
+Mar-28 03:46:40.294 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Mar-28 03:46:40.294 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[]
+Mar-28 03:46:40.324 [main] DEBUG nextflow.Session - Session UUID: 720b4381-cda1-40f6-b00c-d82ed488c651
+Mar-28 03:46:40.324 [main] DEBUG nextflow.Session - Run name: voluminous_mendel
+Mar-28 03:46:40.325 [main] DEBUG nextflow.Session - Executor pool size: 8
+Mar-28 03:46:40.330 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Mar-28 03:46:40.333 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Mar-28 03:46:40.355 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 24.10.4 build 5934
+  Created: 20-01-2025 16:47 UTC (16:47 BST)
+  System: Mac OS X 26.3.1
+  Runtime: Groovy 4.0.23 on OpenJDK 64-Bit Server VM 17.0.10+7-LTS
+  Encoding: UTF-8 (UTF-8)
+  Process: 68285@07-G3-80863-22 [192.168.1.175]
+  CPUs: 8 - Mem: 16 GB (75.5 MB) - Swap: 13 GB (1.1 GB)
+Mar-28 03:46:40.368 [main] DEBUG nextflow.Session - Work-dir: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/work [Mac OS X]
+Mar-28 03:46:40.368 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/bin
+Mar-28 03:46:40.373 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Mar-28 03:46:40.379 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Mar-28 03:46:40.392 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Mar-28 03:46:40.398 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 9; maxThreads: 1000
+Mar-28 03:46:40.441 [main] DEBUG nextflow.Session - Session start
+Mar-28 03:46:40.501 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Mar-28 03:46:40.707 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Mar-28 03:46:40.707 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Mar-28 03:46:40.711 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Mar-28 03:46:40.714 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=8; memory=16 GB; capacity=8; pollInterval=100ms; dumpInterval=5m
+Mar-28 03:46:40.716 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Mar-28 03:46:40.750 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Mar-28 03:46:40.751 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Mar-28 03:46:40.753 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: METAGENOME_PIPELINE:MEGAHIT, METAGENOME_PIPELINE:KRAKEN2, MEGAHIT, KRAKEN2
+Mar-28 03:46:40.754 [main] DEBUG nextflow.Session - Igniting dataflow network (3)
+Mar-28 03:46:40.757 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: data/; pattern: *_{R1,R2}.fastq.gz; options: [:]
+Mar-28 03:46:40.757 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > METAGENOME_PIPELINE:KRAKEN2
+Mar-28 03:46:40.757 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > METAGENOME_PIPELINE:MEGAHIT
+Mar-28 03:46:40.758 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_e6e8cd11de32870d: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/main.nf
+  Script_01014db0595192c8: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/./workflows/../modules/kraken2.nf
+  Script_3fa92ecd978ba3f3: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/./workflows/../modules/megahit.nf
+  Script_fb6ec645dee20a36: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/./workflows/metagenome.nf
+Mar-28 03:46:40.758 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Mar-28 03:46:40.758 [main] DEBUG nextflow.Session - Session await
+Mar-28 03:46:40.840 [Actor Thread 5] DEBUG nextflow.conda.CondaCache - micromamba found local env for environment=conda-forge::python=3.10 bioconda::kraken2 bioconda::megahit; path=/Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/work/conda/env-1d256ef58286d98f0bdb6a0b0159efe0
+Mar-28 03:46:40.918 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Mar-28 03:46:40.920 [Task submitter] INFO  nextflow.Session - [9e/a122f3] Submitted process > METAGENOME_PIPELINE:MEGAHIT (sample_1)
+Mar-28 03:46:40.924 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Mar-28 03:46:40.925 [Task submitter] INFO  nextflow.Session - [84/6e9ca6] Submitted process > METAGENOME_PIPELINE:KRAKEN2 (sample_1)
+Mar-28 03:46:42.159 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: METAGENOME_PIPELINE:MEGAHIT (sample_1); status: COMPLETED; exit: 0; error: -; workDir: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/work/9e/a122f3fe3099af8da656c67c64a62d]
+Mar-28 03:46:42.159 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Mar-28 03:46:46.590 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: METAGENOME_PIPELINE:KRAKEN2 (sample_1); status: COMPLETED; exit: 0; error: -; workDir: /Users/u5502376/Documents/Github/scalable-metagenomic-analysis-pipeline/work/84/6e9ca66079a4df9f6a1583f54baa48]
+Mar-28 03:46:46.596 [main] DEBUG nextflow.Session - Session await > all processes finished
+Mar-28 03:46:46.696 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+Mar-28 03:46:46.697 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Mar-28 03:46:46.702 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
+Mar-28 03:46:46.710 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=2; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=6.9s; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=2; peakCpus=2; peakMemory=0; ]
+Mar-28 03:46:46.826 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+Mar-28 03:46:46.837 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
+Mar-28 03:46:46.838 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

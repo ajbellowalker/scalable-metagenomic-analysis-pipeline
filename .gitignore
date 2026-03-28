@@ -2,6 +2,9 @@ data/
 results/
 raw_reads/
 databases/
+nextflow/
+work/
+*.log
 *.fastq
 *.fastq.gz
 *.fq
