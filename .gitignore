@@ -7,3 +7,4 @@ databases/
 .DS_Store
 *.log
 .env
+nextflow/
