@@ -38,8 +38,9 @@ A modular, reproducible metagenomics pipeline built using Nextflow DSL2 for taxo
 4. MAG quality is assessed (CheckM2)  
 5. Taxonomy is assigned (GTDB-Tk)  
 6. Outputs are summarised with MultiQC and custom visualisations
-7. Workflow management: Nextflow (DSL2)
-8. Reproducibility: Conda / Micromamba environments  
+
+Workflow management: Nextflow (DSL2)
+Reproducibility: Conda / Micromamba environments  
 
 ## 📦 Installation
 
