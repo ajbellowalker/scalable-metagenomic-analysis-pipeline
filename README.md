@@ -30,6 +30,8 @@ A modular, reproducible metagenomics pipeline built using Nextflow DSL2 for taxo
 
 ## 🔄 Pipeline Overview
 
+![Pipeline](figures/pipeline_diagram.png)
+
 1. Quality-controlled reads are processed for taxonomic profiling (Kraken2)  
 2. Reads are assembled into contigs (MEGAHIT)  
 3. Contigs are binned into MAGs (MetaBAT2)  
