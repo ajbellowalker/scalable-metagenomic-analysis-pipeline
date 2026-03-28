@@ -1,6 +1,0 @@
-2026-03-28 04:28:18	8.5s	suspicious_mirzakhani	ERR	59b9619ba3a7f7c61022216797ef8e00	31a3d2d5-2e15-45bd-ab8e-990d2d96af63	nextflow run main.nf -profile conda -resume
-2026-03-28 04:33:27	29.3s	jovial_ekeblad	ERR	59b9619ba3a7f7c61022216797ef8e00	31a3d2d5-2e15-45bd-ab8e-990d2d96af63	nextflow run main.nf -profile conda -resume
-2026-03-28 04:34:49	3.5s	cheesy_wegener	ERR	59b9619ba3a7f7c61022216797ef8e00	31a3d2d5-2e15-45bd-ab8e-990d2d96af63	nextflow run main.nf -profile conda -resume
-2026-03-28 04:40:28	6.5s	jolly_edison	OK	59b9619ba3a7f7c61022216797ef8e00	31a3d2d5-2e15-45bd-ab8e-990d2d96af63	nextflow run main.nf -profile conda -resume
-2026-03-28 04:47:30	1.2s	sleepy_chandrasekhar	OK	59b9619ba3a7f7c61022216797ef8e00	31a3d2d5-2e15-45bd-ab8e-990d2d96af63	nextflow run main.nf -profile conda -resume
-2026-03-28 04:53:21	1m 45s	determined_church	OK	59b9619ba3a7f7c61022216797ef8e00	31a3d2d5-2e15-45bd-ab8e-990d2d96af63	nextflow run main.nf -profile conda -resume
