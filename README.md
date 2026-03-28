@@ -1,3 +1,7 @@
+![Nextflow](https://img.shields.io/badge/workflow-Nextflow-blue)
+![Conda](https://img.shields.io/badge/env-conda-green)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+
 ## 🚀 Quick Start
 
 ```bash
