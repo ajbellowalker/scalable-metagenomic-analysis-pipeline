@@ -129,6 +129,8 @@ Designed for deployment on AWS or HPC environments, this workflow bridges biolog
 Ayemere J. Bellowalker  
 Bioinformatics | Microbiome | Computational Biology
 
+GitHub: <https://github.com/ajbellowalker>
+
 ## 📄 License
 
 MIT

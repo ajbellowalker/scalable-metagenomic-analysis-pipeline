@@ -5,6 +5,7 @@ process METABAT2 {
     tag "$sample_id"
 
     input:
+    val sample_id
     path assembly_dir
 
     output:
